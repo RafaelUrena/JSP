@@ -9,16 +9,44 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Mosca</title>
+        <title>La Mosca</title>
     </head>
     <body>
         <h1>La mosca</h1>
-        <div class="tamanio" style="border: 3px black dotted; width: 20%;">
-        <form name="formu" method="POST" action="juego.jsp">
-            <label>Tamaño del tablero</label>
-            <p>Ponga el tamaño: <input type="number" name="tam" value=""></p>
-            <input type="submit" name="aceptar" value="Aceptar"> 
-        </form>
+        <div>
+            <%
+                out.print("<p>valor de casillas en session: " + session.getAttribute("casillas") + "</p>"); 
+            %>
+            <form name="main-form" method="POST">
+                <h3>Tamaño del tablero</h3>
+                <p>N&uacute;mero de casillas: <input type="number" name="casillas" value="1" min-value="1"></p>
+                <input type="submit" name="aceptar" value="Aceptar"> 
+            </form>
+        </div>
+        <div>
+            <h3>Encontrar la mosca</h3>
+            <%
+                //String casillas = request.getParameter("casillas");
+                try {
+                    int casillas = Integer.parseInt(request.getParameter("casillas"));
+             
+                    session.setAttribute("casillas", casillas);
+                    
+                    // situar la mosca en un boton
+                    int botonMosca = (int) (Math.random() * casillas);
+                    
+                    out.print("<p>Casillas: " + casillas + "</p>");
+                    out.print("<p>Mosca: " + botonMosca + "</p>");
+                    
+                    for (int i = 0; i < casillas; i++) { 
+                %>
+                        <input type="submit" name="boton-<%= i %>" value="Boton-<%= i + 1 %>">
+                <%
+                    }
+                } catch (NumberFormatException e) {
+                    out.print("Error");
+                }
+            %>
         </div>
     </body>
 </html>
