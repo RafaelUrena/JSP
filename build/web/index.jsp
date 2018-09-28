@@ -4,24 +4,19 @@
     Author     : rafa
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>La Mosca</title>
-    </head>
-    <body>
-        <h1>La mosca</h1>
-        <div>
-            <%
-                out.print("<p>valor de casillas en session: " + session.getAttribute("casillas") + "</p>"); 
-            %>
-            <form name="main-form" action="juego.jsp" method="POST">
-                <h3>Tamaño del tablero</h3>
-                <p>N&uacute;mero de casillas: <input type="number" name="casillas" value="1" min-value="1"></p>
-                <input type="submit" value="Generar"> 
-            </form>
+<%@ include file="includes/header.jsp" %>
+
+<div class="container text-center">
+    <h1 class="mb-5">La Moscarda</h1>
+    <form method="POST" action="juego.jsp">
+        <div class="form-row justify-content-center">
+            <div class="card col-md-4 p-4">
+                <h3>Formaci&oacute;n</h3>
+                <input id="casillas" type="number" name="casillas" min="1" class="form-control" placeholder="N&uacute;mero de Casillas">
+                <button class="btn btn-primary btn-block mt-2" type="submit">Crear</button>
+            </div>
         </div>
-    </body>
-</html>
+    </form>
+</div>
+
+<%@ include file="includes/footer.jsp" %>
