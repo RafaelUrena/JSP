@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package clases;
 
 /**
@@ -21,17 +22,21 @@ public class Tablero {
         this.tablero = new char[casillas];
     }
 
-    public char[] generarTablero() {
-        for (int i = 0; i < this.tablero.length; i++) {
-            this.tablero[i] = 'o';
-        }
+    public char[] obtenerTablero() {
+//        return new char [this.tablero.length];
+        char [] tablero = new char[this.length()];
+
+        int celda = situarMosca();
+        tablero[celda] = 'M';
         
-        return this.tablero;
-        
-//        this.tablero[(int) (Math.random() * this.tablero.length)] = '*';
+        return tablero;
+    }
+    
+    private int situarMosca() {
+        return (int) (Math.random() * this.length());
     }
 
-    // no se para que es esto ...
+    // prueba a hacer tu esta logica :)
     public void revolotear() {
         char aux = '-';
         int i;
@@ -43,18 +48,9 @@ public class Tablero {
             }
         }
 
+        // no uses this.tablero.length (usa this.length() que para eso has creado el metodo :)
         i = (int) (Math.random() * this.tablero.length);
         this.tablero[i] = aux;
-    }
-
-    public void queHaPasado() {    
-
-    }
-    
-    public void mostrar(){
-        for (int i = 0; i < this.tablero.length; i++) {
-            System.out.print(this.tablero[i]);
-        }
     }
     
     public int length(){
