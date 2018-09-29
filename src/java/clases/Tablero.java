@@ -23,16 +23,16 @@ public class Tablero {
     }
 
     public char[] obtenerTablero() {
-//        return new char [this.tablero.length];
-        char [] tablero = new char[this.length()];
-
-        int celda = situarMosca();
-        tablero[celda] = 'M';
-        
-        return tablero;
+        return new char [this.tablero.length];
+//        char [] tablero = new char[this.length()];
+//
+//        int celda = situarMosca();
+//        tablero[celda] = 'M';
+//        
+//        return tablero;
     }
     
-    private int situarMosca() {
+    public int situarMosca() {
         return (int) (Math.random() * this.length());
     }
 
