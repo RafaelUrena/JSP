@@ -32,7 +32,7 @@
             response.sendRedirect("/JSP-master");
         }
     }
-
+    
     // convertir seleccion a entero
     int casillas = Integer.parseInt(celdas);
 
@@ -42,10 +42,15 @@
 
     // construir formacion
     Tablero tablero = new Tablero(casillas);
+    int moscaCelda = -1;
     
     // mostar el array con la mosca (debugging only)
     char [] t = tablero.obtenerTablero();
     for (int j = 0; j < t.length; j++) {
+        if (t[j] == 'M') {
+            // j + 1 por que los botones no empiezan en 0
+            moscaCelda = j + 1;
+        }
         out.print("[" + t[j] + "]");
     }
     %>
@@ -66,13 +71,25 @@
         
     <%
         String boton = request.getParameter("boton");
-        out.print("boton " + boton);    
+
+        if (boton != null) {
+            String botonValue = boton.replaceAll("[\\s\\D]+", "");
+            String botonMosca = moscaCelda + "";
+            
+            out.print("Has pulsado el boton " + botonValue + " y la mosca esta en el " + botonMosca);
+            
+            if (botonValue.equals(botonMosca)) {
+                out.print("<h3>Has matado la moscarda!</h3>");
+            } else {
+                out.print("<h3>Has fallado!</h3>");
+            }
+        }
     %>
-        
+    
+    <h3>Errores</h3>
     <ul class="list-group">
-        <li class="list-group-item">Necesita que no cambie le mosca de posicion.</li>
-        <li class="list-group-item">El boton (String) y botonMosca (int) tienen que ser del mismo tipo.</li>
-        <li class="list-group-item">Producir errores para evitar que el programa se muera.</li>
+        <li class="list-group-item">la mosca no debe cambiar de celda hasta que se haga clic en casilla adyacente.</li>
+        <li class="list-group-item">Evitar error de excepcion cuando se pasa un numero de celdas vacio.</li>
     </ul>
 </div>
 
