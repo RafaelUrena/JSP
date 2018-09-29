@@ -12,6 +12,13 @@
     <h1 class="mb-5">Encontrar la Mosca</h1>
     
     <%
+        String url = request.getRequestURL().toString();
+        String baseURL = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+    %>
+    
+    <a href="<%= baseURL %>">Inicio</a>
+    
+    <%
     // formacion de casillas elegidas por el usuario
     String celdas = request.getParameter("casillas");
 
@@ -45,7 +52,7 @@
         
     <h4>En cual de estas <%= casillas %> casillas est&aacute; la mosca?<h4>
     <div class="py-4">
-        <form>
+        <form method="POST">
             
     <%  
         for (int i = 0; i < tablero.obtenerTablero().length; i++) {
