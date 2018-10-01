@@ -12,16 +12,12 @@
     <h1 class="mb-5">Encontrar la Mosca</h1>
     
     <%
-        String url = request.getRequestURL().toString();
-        String baseURL = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
-    %>
-    
-    <a href="<%= baseURL %>">Juego Nuevo</a>
-    
-    <%
+    String url = request.getRequestURL().toString();
+    String baseURL = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+
     // formacion de casillas elegidas por el usuario
     String celdas = request.getParameter("casillas");
-
+   
     // este numero se pierde cuando el usuario refresca la pagina
     if (celdas == null) {
         // usar el valor de casillas de la sesion si existe
@@ -33,6 +29,8 @@
         }
     }
     
+    int fallos = 0;
+    
     // convertir seleccion a entero
     int casillas = Integer.parseInt(celdas);
         
@@ -43,62 +41,57 @@
     // De esta manera se puede recargar la pagina sin perder las casillas.
     session.setAttribute("casillas", casillas);
     
-    boolean juego = false;
-    
-    if (session.getAttribute("juego") != null) {
-        juego = (Boolean) session.getAttribute("juego");
-    }
-    out.print("<p>Juego: " + juego + "</p>");
-    
-    if (!juego) {
+    if (session.getAttribute("moscaCelda") == null) {
+        out.print("<h3>Nuevo Juego</h3>");
+        
         // + 1 por que los botones no empiezan en zero.
         int situarMosca = tablero.situarMosca() + 1;
-
+        
         // situar mosca en sesion en una celda al azar
         session.setAttribute("moscaCelda", situarMosca);
+        out.print("<p>la mosca esta en la casilla " + situarMosca + "</p>");
         
-        out.print("<h3>Juego NUEVO</h3>");
-        
-        // empezar a jugar
-        session.setAttribute("juego", true);
+        out.print(tablero.mostrar());
     } else {
-        out.print("<h3>" + session.getAttribute("juego") + "</h3>");
         out.print("<p>la mosca esta en la casilla " + session.getAttribute("moscaCelda") + "</p>");
-    %>
         
-        <h4 class="pt-3">En cual de estas <%= casillas %> casillas est&aacute; la mosca?<h4>
-        <div class="py-4">
-            <form method="POST">
-
-        <%  
-            for (int i = 0; i < tablero.obtenerTablero().length; i++) {
-        %>
-                <input type="submit" name="boton" class="casilla btn btn-lg btn-primary mb-1" value="Celda <%= i + 1 %>">
-        <%
-            }
-        %>
-            </form>
-        </div>
-        
-    <%
+        boolean ganador = false;
         String boton = request.getParameter("boton");
 
         if (boton != null) {
             String botonValue = boton.replaceAll("[\\s\\D]+", "");
             String botonMosca = session.getAttribute("moscaCelda") + "";
             
-            out.print("Has pulsado el boton " + botonValue + " y la mosca esta en el " + botonMosca);
-            
             if (botonValue.equals(botonMosca)) {
-                out.print("<h3>Has matado la moscarda!</h3>");
-                // quitarlo todo menos el enlace a inicio
-                session.setAttribute("juego", false);
-                out.print("<p>Attribute set to false</p>");
-//                response.sendRedirect(url);
-            } else {
-                out.print("<h3>Has fallado!</h3>");
-                // sigue intentandolo ...
+                int manotazos = (Integer) session.getAttribute("fallos");
+                String mensaje = "Has matado la mosca de " + manotazos + " manotazo" + (manotazos > 1 ? "s" : "");
                 
+                out.print("<h3>" + mensaje + "</h3>");
+                out.print("<a class='btn btn-primary btn-lg mt-3' href='" + baseURL + "'>Jugar otra vez</a>");
+                
+                // destroy session
+                session.invalidate();
+                
+                ganador = true;
+                
+            } else {
+                out.print("<h3>Has fallado</h3>");
+                if (session.getAttribute("fallos") == null) {
+                    fallos = 1;
+                    session.setAttribute("fallos", 1);
+                } else {
+                    out.print("here...");
+                    fallos += (Integer) session.getAttribute("fallos") + 1;
+                    session.setAttribute("fallos", fallos);
+                }
+            }
+        }
+        
+        if (!ganador) {
+            out.print(tablero.mostrar());
+            
+            if (fallos > 0) {
+                out.print("<h4>" + fallos + "</h4>");
             }
         }
     }

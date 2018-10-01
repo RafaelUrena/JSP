@@ -32,6 +32,20 @@ public class Tablero {
 //        return tablero;
     }
     
+    public String mostrar() {
+        String output = "<h4 class='pt-3'>D&oacute;nde est&aacute; la mosca?<h4>";
+        output += "<div class='py-4'>";
+        output += "<form method='POST'>";
+
+        for (int i = 0; i < this.length(); i++) {
+            output += "<input type='submit' name='boton' class='casilla btn btn-lg btn-success mr-2 mb-2' value='Celda " + (i + 1) + "'>";
+        }
+        
+        output += "</form>";
+        output += "</div>";
+        return output;
+    }
+    
     public int situarMosca() {
         return (int) (Math.random() * this.length());
     }
