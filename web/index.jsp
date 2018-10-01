@@ -13,7 +13,7 @@
             <div class="card col-md-4 p-4">
                 <h3>Formaci&oacute;n</h3>
                 <input id="casillas" type="number" name="casillas" min="3" max="100" required class="form-control" placeholder="N&uacute;mero de Casillas">
-                <input name="jugar" class="btn btn-primary btn-block mt-2" type="submit" value="Crear">
+                <input name="jugar" class="btn btn-primary btn-block mt-2" type="submit" value="Crear Casillas">
             </div>
         </div>
     </form>

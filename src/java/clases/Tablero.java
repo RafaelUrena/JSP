@@ -13,7 +13,7 @@ package clases;
 public class Tablero {
 
     private char tablero[];
-    private int mosca;
+    private static int mosca;
 
     public Tablero() {
         this.tablero = new char[5];
@@ -25,12 +25,6 @@ public class Tablero {
 
     public char[] obtenerTablero() {
         return new char [this.tablero.length];
-//        char [] tablero = new char[this.length()];
-//
-//        int celda = situarMosca();
-//        tablero[celda] = 'M';
-//        
-//        return tablero;
     }
     
     public String mostrar() {
@@ -46,24 +40,36 @@ public class Tablero {
         output += "</div>";
         return output;
     }
-    
+
     public int situarMosca() {
         revolotear();
         
+        System.out.println("****************************");
+        System.out.println("La mosca se ha parado en la casilla " + this.mosca);
         return this.mosca;
     }
     
     public int posicionDeLaMosca() {
+        System.out.println("posicion de la mosca: " + this.mosca);
         return this.mosca;
     }
     
+    public void ponerMoscaEnCasilla(int posicion) {
+        this.mosca = posicion;
+    }
+    
     public boolean matarMosca(int casilla) {
+        System.out.println("manotazo en la casilla: " + casilla);
+        System.out.println("la mosca esta en la casilla " + this.mosca);
         if (this.mosca == casilla) {
+            System.out.println("Has matado la mosca");
             return true;
-        } else if (this.mosca == casilla - 1 || this.mosca == casilla + 1) {
+        } 
+            
+        if (casilla == this.mosca - 1 || casilla == this.mosca + 1) {
             // revolotear si la posicion es adyacente a donde esta la mosca
             revolotear();
-            
+                        
             return false;
         }
         
@@ -72,6 +78,12 @@ public class Tablero {
 
     public void revolotear() {
         this.mosca = (int) (Math.random() * this.length());
+        
+        System.out.println("la mosca ha revoloteado a la casilla " + this.mosca);
+    }
+    
+    public boolean haRevoloteado() {
+        return false;
     }
     
     public int length(){

@@ -8,6 +8,22 @@ and open the template in the editor.
     Author     : admin
 */
 
+body {
+    background-color: #eee;
+}
+
+h1 {
+    color: black;
+    text-shadow: 2px 3px darkgray;
+}
+
 .btn.casilla {
     width: 6em;
+}
+
+div.mosca {
+    height: 400px;
+    /*padding: 4em;*/
+    background: url('../images/mosca.jpg') no-repeat center center;
+    /*background-size: cover;*/
 }

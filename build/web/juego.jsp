@@ -50,31 +50,38 @@
         out.print("<h3>Nuevo Juego</h3>");
         
         // + 1 por que los botones no empiezan en zero.
-        int situarMosca = tablero.situarMosca() + 1;
+        int moscaCelda = tablero.situarMosca() + 1;
         
         // situar mosca en sesion en una celda al azar
-        session.setAttribute("moscaCelda", situarMosca);
-        out.print("<p>la mosca esta en la casilla " + situarMosca + "</p>");
+        session.setAttribute("moscaCelda", moscaCelda);
+//        out.print("<p>la mosca esta en la casilla " + moscaCelda + "</p>");
         
         out.print(tablero.mostrar());
     } else {
-        out.print("<p>la mosca esta en la casilla " + session.getAttribute("moscaCelda") + "</p>");
-        
         boolean ganador = false;
         String boton = request.getParameter("boton");
 
         if (boton != null) {
             String botonValue = boton.replaceAll("[\\s\\D]+", "");
-            String botonMosca = session.getAttribute("moscaCelda") + "";
+//            String botonMosca = session.getAttribute("moscaCelda") + "";
             
-            if (botonValue.equals(botonMosca)) {
-                String mensaje = "Has matado la mosca";
+//            out.print("<p>Posicion: " + (tablero.posicionDeLaMosca() + 1) + "</p>");
+            int manotazo = Integer.parseInt(botonValue.toString()) - 1;
+//            out.print("<p>manotazo: " + manotazo + "</p>");
+            
+            if (tablero.matarMosca(manotazo)) {
+                int manotazos = 1;
+                if (session.getAttribute("fallos") != null) {
+                    manotazos = Integer.parseInt(session.getAttribute("fallos").toString());
+                }
                 
+                String mensaje = "Has matado la mosca de " + manotazos + " manotazo" + (manotazos > 1 ? "s" : "");                
                 out.print("<h3>" + mensaje + "</h3>");
+                out.print("<div class=\"mosca\"></div>");
                 out.print("<a class='btn btn-primary btn-lg mt-3' href='" + baseURL + "'>Jugar otra vez</a>");
 
                 ganador = true;
-                
+
                 // destroy session
                 session.invalidate();
             } else {
@@ -87,7 +94,7 @@
                 }
                 
                 if (fallos > 0) {
-                    String mensaje = "Has cometido " + fallos + " fallo" + (fallos > 1 ? "s" : "");
+                    String mensaje = "Te has equivocado " + fallos + " ve" + (fallos > 1 ? "ces" : "z");
                     out.print("<h3>" + mensaje + "</h3>");
                 }
             }
@@ -101,9 +108,3 @@
 </div>
 
 <%@ include file="includes/footer.jsp" %>
-
-<%!
-    public String test() {
-        return "hello";
-    }
-%>
