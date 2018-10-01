@@ -70,7 +70,7 @@
                 // mostrarle al usuario cuantos manotazos han sido necesarios para matar la mosca
                 int manotazos = 1;
                 if (session.getAttribute("fallos") != null) {
-                    manotazos = Integer.parseInt(session.getAttribute("fallos").toString());
+                    manotazos = (Integer) session.getAttribute("fallos") + 1;
                 }
                 
                 String mensaje = "Has matado la mosca de " + manotazos + " manotazo" + (manotazos > 1 ? "s" : "");                
@@ -88,7 +88,8 @@
                     fallos = 1;
                     session.setAttribute("fallos", 1);
                 } else {
-                    fallos += (Integer) session.getAttribute("fallos") + 1;
+                    fallos = (Integer) session.getAttribute("fallos") + 1;
+                    out.print("fallos: " + fallos);
                     session.setAttribute("fallos", fallos);
                 }
                 
