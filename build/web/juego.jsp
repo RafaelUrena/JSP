@@ -43,7 +43,12 @@
     // De esta manera se puede recargar la pagina sin perder las casillas.
     session.setAttribute("casillas", casillas);
     
-    boolean juego = (Boolean) session.getAttribute("juego");
+    boolean juego = false;
+    
+    if (session.getAttribute("juego") != null) {
+        juego = (Boolean) session.getAttribute("juego");
+    }
+    out.print("<p>Juego: " + juego + "</p>");
     
     if (!juego) {
         // + 1 por que los botones no empiezan en zero.
@@ -51,9 +56,13 @@
 
         // situar mosca en sesion en una celda al azar
         session.setAttribute("moscaCelda", situarMosca);
+        
+        out.print("<h3>Juego NUEVO</h3>");
+        
         // empezar a jugar
         session.setAttribute("juego", true);
     } else {
+        out.print("<h3>" + session.getAttribute("juego") + "</h3>");
         out.print("<p>la mosca esta en la casilla " + session.getAttribute("moscaCelda") + "</p>");
     %>
         
@@ -84,9 +93,12 @@
                 out.print("<h3>Has matado la moscarda!</h3>");
                 // quitarlo todo menos el enlace a inicio
                 session.setAttribute("juego", false);
+                out.print("<p>Attribute set to false</p>");
+//                response.sendRedirect(url);
             } else {
                 out.print("<h3>Has fallado!</h3>");
                 // sigue intentandolo ...
+                
             }
         }
     }
@@ -101,3 +113,9 @@
 </div>
 
 <%@ include file="includes/footer.jsp" %>
+
+<%!
+    public String test() {
+        return "hello";
+    }
+%>
