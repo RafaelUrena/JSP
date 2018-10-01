@@ -21,18 +21,23 @@
     // este numero se pierde cuando el usuario refresca la pagina
     if (celdas == null) {
         // usar el valor de casillas de la sesion si existe
-        celdas = session.getAttribute("casillas") + "";
-
-        // redirigir usuario para que ponga el numero de casillas si la sesion no contiene el atributo "casillas"
-        if (celdas == null) {
+        if (session.getAttribute("casillas") != null) {
+            celdas = session.getAttribute("casillas").toString();
+        } else {
+            // redirigir usuario para que ponga el numero de casillas si la sesion no contiene el atributo "casillas"
             response.sendRedirect(baseURL);
         }
     }
     
     int fallos = 0;
+    int casillas = 0;
     
-    // convertir seleccion a entero
-    int casillas = Integer.parseInt(celdas);
+    try {
+        // convertir seleccion a entero
+        casillas = Integer.parseInt(celdas); 
+    } catch (Exception e) {
+        out.print("error!");
+    }
         
     // construir fila de celdas
     Tablero tablero = new Tablero(casillas);
@@ -63,46 +68,36 @@
             String botonMosca = session.getAttribute("moscaCelda") + "";
             
             if (botonValue.equals(botonMosca)) {
-                int manotazos = (Integer) session.getAttribute("fallos");
-                String mensaje = "Has matado la mosca de " + manotazos + " manotazo" + (manotazos > 1 ? "s" : "");
+                String mensaje = "Has matado la mosca";
                 
                 out.print("<h3>" + mensaje + "</h3>");
                 out.print("<a class='btn btn-primary btn-lg mt-3' href='" + baseURL + "'>Jugar otra vez</a>");
+
+                ganador = true;
                 
                 // destroy session
                 session.invalidate();
-                
-                ganador = true;
-                
             } else {
-                out.print("<h3>Has fallado</h3>");
                 if (session.getAttribute("fallos") == null) {
                     fallos = 1;
                     session.setAttribute("fallos", 1);
                 } else {
-                    out.print("here...");
                     fallos += (Integer) session.getAttribute("fallos") + 1;
                     session.setAttribute("fallos", fallos);
+                }
+                
+                if (fallos > 0) {
+                    String mensaje = "Has cometido " + fallos + " fallo" + (fallos > 1 ? "s" : "");
+                    out.print("<h3>" + mensaje + "</h3>");
                 }
             }
         }
         
         if (!ganador) {
             out.print(tablero.mostrar());
-            
-            if (fallos > 0) {
-                out.print("<h4>" + fallos + "</h4>");
-            }
         }
     }
     %>
-    
-    <hr>
-    
-    <h3>Errores</h3>
-    <ul class="list-group">
-        <li class="list-group-item">la mosca no debe cambiar de celda hasta que se haga clic en casilla adyacente.</li>
-    </ul>
 </div>
 
 <%@ include file="includes/footer.jsp" %>
