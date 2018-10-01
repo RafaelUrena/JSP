@@ -63,13 +63,11 @@
 
         if (boton != null) {
             String botonValue = boton.replaceAll("[\\s\\D]+", "");
-//            String botonMosca = session.getAttribute("moscaCelda") + "";
             
-//            out.print("<p>Posicion: " + (tablero.posicionDeLaMosca() + 1) + "</p>");
             int manotazo = Integer.parseInt(botonValue.toString()) - 1;
-//            out.print("<p>manotazo: " + manotazo + "</p>");
             
             if (tablero.matarMosca(manotazo)) {
+                // mostrarle al usuario cuantos manotazos han sido necesarios para matar la mosca
                 int manotazos = 1;
                 if (session.getAttribute("fallos") != null) {
                     manotazos = Integer.parseInt(session.getAttribute("fallos").toString());
@@ -85,6 +83,7 @@
                 // destroy session
                 session.invalidate();
             } else {
+                // inicializar fallos
                 if (session.getAttribute("fallos") == null) {
                     fallos = 1;
                     session.setAttribute("fallos", 1);
@@ -93,9 +92,15 @@
                     session.setAttribute("fallos", fallos);
                 }
                 
+                // mostrar al usuario el numero de veces que ha fallado
                 if (fallos > 0) {
                     String mensaje = "Te has equivocado " + fallos + " ve" + (fallos > 1 ? "ces" : "z");
                     out.print("<h3>" + mensaje + "</h3>");
+                }
+                
+                // mostrar al usuario que la mosca se ha movido de casilla
+                if (tablero.haRevoloteado()) {
+                    out.print("<h3>Has espatado a la mosca al tocar la casilla " + botonValue + "</h3>");
                 }
             }
         }

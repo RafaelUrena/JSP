@@ -14,6 +14,7 @@ public class Tablero {
 
     private char tablero[];
     private static int mosca;
+    private static boolean haRevoloteado;
 
     public Tablero() {
         this.tablero = new char[5];
@@ -21,6 +22,7 @@ public class Tablero {
 
     public Tablero(int casillas) {
         this.tablero = new char[casillas];
+        this.haRevoloteado = false;
     }
 
     public char[] obtenerTablero() {
@@ -42,7 +44,7 @@ public class Tablero {
     }
 
     public int situarMosca() {
-        revolotear();
+        revolotear(true);
         
         System.out.println("****************************");
         System.out.println("La mosca se ha parado en la casilla " + this.mosca);
@@ -68,7 +70,8 @@ public class Tablero {
             
         if (casilla == this.mosca - 1 || casilla == this.mosca + 1) {
             // revolotear si la posicion es adyacente a donde esta la mosca
-            revolotear();
+            // false indica que no es el inicio de juego
+            revolotear(false);
                         
             return false;
         }
@@ -76,14 +79,21 @@ public class Tablero {
         return false;
     }
 
-    public void revolotear() {
+    public void revolotear(boolean inicio) {
+        // situar mosca al azar
         this.mosca = (int) (Math.random() * this.length());
-        
-        System.out.println("la mosca ha revoloteado a la casilla " + this.mosca);
+
+        // si no es el inicio del juego mostrar que la mosca se ha movido
+        if (!inicio) {
+            this.haRevoloteado = true;
+            System.out.println("la mosca se ha posado en la casilla " + this.mosca);
+        } else {
+            System.out.println("la mosca ha revoloteado a la casilla " + this.mosca);
+        }
     }
     
     public boolean haRevoloteado() {
-        return false;
+        return this.haRevoloteado;
     }
     
     public int length(){
