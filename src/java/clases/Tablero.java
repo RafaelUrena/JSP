@@ -13,6 +13,7 @@ package clases;
 public class Tablero {
 
     private char tablero[];
+    private int mosca;
 
     public Tablero() {
         this.tablero = new char[5];
@@ -47,24 +48,30 @@ public class Tablero {
     }
     
     public int situarMosca() {
-        return (int) (Math.random() * this.length());
+        revolotear();
+        
+        return this.mosca;
+    }
+    
+    public int posicionDeLaMosca() {
+        return this.mosca;
+    }
+    
+    public boolean matarMosca(int casilla) {
+        if (this.mosca == casilla) {
+            return true;
+        } else if (this.mosca == casilla - 1 || this.mosca == casilla + 1) {
+            // revolotear si la posicion es adyacente a donde esta la mosca
+            revolotear();
+            
+            return false;
+        }
+        
+        return false;
     }
 
-    // prueba a hacer tu esta logica :)
     public void revolotear() {
-        char aux = '-';
-        int i;
-
-        for (int j = 0; j < this.tablero.length; j++) {
-            if (this.tablero[j] != '-') {
-                aux = this.tablero[j];
-                this.tablero[j] = '-';
-            }
-        }
-
-        // no uses this.tablero.length (usa this.length() que para eso has creado el metodo :)
-        i = (int) (Math.random() * this.tablero.length);
-        this.tablero[i] = aux;
+        this.mosca = (int) (Math.random() * this.length());
     }
     
     public int length(){
